@@ -1,8 +1,11 @@
 import { createEffect, createSignal, type Component } from 'solid-js';
 import Landing from './components/Landing';
 import IncomeForm from './components/IncomeForm';
+import SavePercentageForm from './components/SavePercentageForm';
+import GoalsPage from './components/GoalsPage';
+import Dashboard from './components/Dashboard';
 
-type Stage = 'landing' | 'income' | 'goals';
+type Stage = 'landing' | 'income' | 'percentage' | 'goals' | 'dashboard';
 const STORAGE_KEY = 'sf-stage';
 
 const App: Component = () => {
@@ -20,12 +23,15 @@ const App: Component = () => {
     <>
       {stage() === 'landing' && <Landing onStart={() => goTo('income')} />}
       {stage() === 'income' && (
-        <IncomeForm onNext={() => goTo('goals')} />
+        <IncomeForm onNext={() => goTo('percentage')} />
+      )}
+      {stage() === 'percentage' && (
+        <SavePercentageForm onNext={() => goTo('goals')} />
       )}
       {stage() === 'goals' && (
-        <div class="p-4 max-w-xl mx-auto">
-        </div>
+        <GoalsPage onNext={() => goTo('dashboard')}/>
       )}
+      {stage() === 'dashboard' && <Dashboard />}
     </>
   );
 };
