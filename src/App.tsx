@@ -1,8 +1,21 @@
-import type { Component } from 'solid-js';
+import { createSignal, type Component } from 'solid-js';
+import Landing from './components/Landing';
 
 const App: Component = () => {
+  const [started, setStarted] = createSignal(false);
   return (
-    <p class="text-4xl text-green-700 text-center py-20">Hello tailwind!</p>
+    <>
+      {!started() ? (
+        <Landing onStart={() => setStarted(true)}/>
+      ) : (
+        <div class="p-4 max-w-xl mx-auto">
+          {/* Now pull in your other pieces: */}
+          {/* <IncomeForm … /> */}
+          {/* <GoalsList … /> */}
+        </div>
+      )
+      }
+    </>
   );
 };
 
