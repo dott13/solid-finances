@@ -12,7 +12,7 @@ const Landing: Component<LandingPage> = (props) => {
                 Track your income, savings rate & see how soon you can afford your next big purchase.
             </p>
             <button
-                class="mt-6 px-8 py-3 rounded-xl bg-brand-primary text-white hover:bg-brand-dark transition"
+                class="mt-6 px-8 py-3 rounded-full bg-brand-primary text-white hover:bg-brand-dark transition"
                 onClick={props.onStart}
             >
                 Let’s Start
