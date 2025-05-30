@@ -1,4 +1,3 @@
-// src/components/GoalModal.tsx
 import { Component, createSignal, createEffect, JSX } from 'solid-js';
 
 export interface Goal {
