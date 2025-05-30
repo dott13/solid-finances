@@ -1,8 +1,57 @@
 @import 'tailwindcss';
 
 @theme {
-    --color-brand-bg: #F6FBF4;
-    --color-brand-accent: #F5DF99;
-    --color-brand-primary: #5FD068;
-    --color-brand-dark: #4B9673;
+  /* Light theme (default) */
+  --color-brand-bg: #F6FBF4;
+  --color-brand-accent: #F5DF99;
+  --color-brand-primary: #5FD068;
+  --color-brand-dark: #4B9673;
+}
+
+/* Dark theme overrides */
+.dark {
+  --color-brand-bg: #1a1a1a;
+  --color-brand-accent: #d4af37;
+  --color-brand-primary: #40b349;
+  --color-brand-dark: #357a5b;
+  
+  /* Additional dark theme colors for better contrast */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e5e5e5;
+  --color-card-bg: #2d2d2d;
+  --color-border: #404040;
+}
+
+/* Light theme explicit values (optional, for clarity) */
+.light {
+  --color-brand-bg: #F6FBF4;
+  --color-brand-accent: #5FD068;
+  --color-brand-primary: #F5DF99;
+  --color-brand-dark: #4B9673;
+  
+  --color-text-primary: #000000;
+  --color-text-secondary: #4B5563;
+  --color-card-bg: #ffffff;
+  --color-border: #e5e7eb;
+}
+
+/* Base styles that adapt to theme */
+body {
+  background-color: var(--color-brand-bg);
+  color: var(--color-text-primary, #000000);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card styles that adapt to theme */
+.theme-card {
+  background-color: var(--color-card-bg, #ffffff);
+  border-color: var(--color-border, var(--color-brand-primary));
+  color: var(--color-text-primary, #000000);
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
 }
