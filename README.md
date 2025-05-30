@@ -1,36 +1,122 @@
-## Usage
+# Solid Finances
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+**Solid Finances** is a client-side financial planning web application built with [SolidJS](https://www.solidjs.com/) and styled using Tailwind CSS. It helps users track their income, set a monthly savings rate, define savings goals, and visualize how long it will take to achieve each goal.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+## Features
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+* **Income & Currency**: Enter your monthly income and select your currency (USD, MDL, ROM, EUR).
+* **Savings Rate**: Specify the percentage of your income you plan to save each month (0–100%).
+* **Goals Management**: Add, edit, and star a savings goal with a name, price, and image.
+* **Dashboard**:
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+  * Displays widgets for income and savings rate with the actual monthly savings amount.
+  * Shows a projected savings chart for the starred goal, with month-by-month progress and a guide line at the target amount.
+  * Lists all goals, highlighting the starred one and showing how many months remain until each goal is reached.
+* **Persistence**: Uses `localStorage` to save state across reloads.
+* **Dark / Light Theme**: Toggle between light and dark mode, with custom color palettes for both.
+* **Clear & Reset**: Reset the application to its initial state by clearing `localStorage` and returning to the landing page.
 
-## Available Scripts
+## Application Flow
 
-In the project directory, you can run:
+1. **Landing Page**
 
-### `npm run dev` or `npm start`
+   * Title: **Solid Finances**
+   * Description of app purpose.
+   * **Let’s Start** button to proceed.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. **Income Input**
 
-The page will reload if you make edits.<br>
+   * Prompt: **Enter Your Income**
+   * Fields: Monthly income (number), currency selector.
+   * **Next** button saves data and navigates to savings rate.
 
-### `npm run build`
+3. **Savings Rate**
 
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
+   * Prompt: **Saving Rate (%)**
+   * Field: Percentage input (0–100).
+   * **Next** button saves data and navigates to goals page.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+4. **Goals Page**
 
-## Deployment
+   * Ask: **Add a savings goal now or later?**
 
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+     * **Now**: shows form to create a new goal.
+     * **Later**: skips directly to the dashboard.
+   * Goal Form:
 
-## This project was created with the [Solid CLI](https://solid-cli.netlify.app)
+     * Fields: Name, price, image upload (preview shown).
+     * **Add Goal** button saves goal and proceeds to dashboard.
+
+5. **Dashboard**
+
+   * **Widgets**:
+
+     * Income widget (amount & currency).
+     * Savings Rate widget (% and actual monthly savings).
+   * **Projected Savings Chart**:
+
+     * Displays cumulative savings over time versus goal price.
+     * X-axis labeled by months (1, 2, 3, ...).
+   * **Goals List**:
+
+     * All goals displayed; starred goal appears first with an animation.
+     * Star button allows marking only one active goal.
+     * Edit button updates name, price, or image in a modal.
+   * **Months Until**:
+
+     * Shows how many months remain to reach the starred goal.
+   * **Add New Goal** button to open modal and create more goals.
+
+## Getting Started
+
+1. **Installation**
+
+   ```bash
+   git clone <repo-url>
+   cd solid-finances
+   npm install
+   ```
+
+2. **Development**
+
+   ```bash
+   npm run dev
+   ```
+
+   Opens `http://localhost:3000` by default.
+
+3. **Build & Deployment**
+
+   ```bash
+   npm run build
+   npm run preview   # to preview production build
+   ```
+
+   Deploy the `dist` folder to any static host (e.g., GitHub Pages).
+
+## Technologies Used
+
+* **SolidJS** (TypeScript)
+* **Tailwind CSS**
+* **Vite** (build tool)
+* **localStorage** (state persistence)
+* **lucide-solid** (icons)
+
+## Customization
+
+* Color variables are defined in **`index.css`** under `:root` (light) and `.dark` (dark) using CSS custom properties:
+
+  ```css
+  :root {
+    --color-brand-bg: #F6FBF4;
+    --color-brand-primary: #5FD068;
+    /* ... */
+  }
+  .dark {
+    --color-brand-bg: #1a1a1a;
+    --color-brand-primary: #40b349;
+    /* ... */
+  }
+  ```
+* Tailwind config has `darkMode: 'class'` to enable class-based theming.
+
