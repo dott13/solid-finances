@@ -1,4 +1,4 @@
-// src/components/Dashboard.tsx
+
 import { Component, createSignal, createEffect, createMemo, For } from 'solid-js';
 import GoalModal, { Goal } from './GoalModal';
 
@@ -82,7 +82,6 @@ const Dashboard: Component = () => {
   return (
     <div class="min-h-screen p-4 bg-[var(--color-brand-bg)]">
       <div class="max-w-4xl mx-auto space-y-8">
-
         {/* Income & Saving Rate */}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="p-6 bg-white rounded-2xl shadow border-2 border-[var(--color-brand-primary)]">
