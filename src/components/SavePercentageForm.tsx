@@ -28,8 +28,19 @@ const SavePercentageForm: Component<SavePercentageFormProps> = (props) => {
   };
 
   return (
-    <div class="min-h-screen flex flex-col items-center justify-center bg-brand-bg px-4">
-      <h2 class="text-3xl font-bold text-brand-primary mb-8">
+    <div
+      class="
+        min-h-screen flex flex-col items-center justify-center
+        bg-[var(--color-brand-bg)] dark:bg-[var(--color-card-bg)]
+        px-4
+      "
+    >
+      <h2
+        class="
+          text-3xl font-bold mb-8
+          text-[var(--color-brand-primary)] dark:text-[var(--color-brand-accent)]
+        "
+      >
         Saving Rate (%)
       </h2>
 
@@ -37,19 +48,31 @@ const SavePercentageForm: Component<SavePercentageFormProps> = (props) => {
         <input
           type="number"
           placeholder="0–100"
-          minLength={0}
-          maxLength={100}
           value={percentage()}
           onInput={handleInput}
-          class="w-24 border-b-2 border-brand-primary bg-transparent text-gray-800 focus:outline-none"
           min="0"
           max="100"
+          class="
+            w-24 border-b-2
+            border-[var(--color-brand-primary)] dark:border-[var(--color-border)]
+            bg-transparent
+            text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]
+            focus:outline-none
+          "
         />
       </div>
 
       <button
         onClick={props.onNext}
-        class="px-8 py-3 bg-brand-primary text-white rounded-full hover:bg-brand-dark transition"
+        class="
+          px-8 py-3 rounded-full transition
+          bg-[var(--color-brand-primary)]
+          hover:bg-[var(--color-brand-dark)]
+          text-white
+          dark:bg-[var(--color-brand-accent)]
+          dark:text-[var(--color-text-primary)]
+          dark:hover:bg-[var(--color-brand-primary)]
+        "
       >
         Next
       </button>

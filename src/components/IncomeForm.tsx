@@ -8,7 +8,6 @@ interface IncomeFormProps {
 const STORAGE_KEY = 'sf-income';
 
 const IncomeForm: Component<IncomeFormProps> = (props) => {
-  // load existing or defaults
   const stored = localStorage.getItem(STORAGE_KEY);
   const initial = stored
     ? JSON.parse(stored)
@@ -25,8 +24,19 @@ const IncomeForm: Component<IncomeFormProps> = (props) => {
   });
 
   return (
-    <div class="min-h-screen flex flex-col items-center justify-center bg-brand-bg px-4">
-      <h2 class="text-3xl font-bold text-brand-primary mb-8">
+    <div
+      class="
+        min-h-screen flex flex-col items-center justify-center
+        bg-[var(--color-brand-bg)] dark:bg-[var(--color-card-bg)]
+        px-4
+      "
+    >
+      <h2
+        class="
+          text-3xl font-bold mb-8
+          text-[var(--color-brand-primary)] dark:text-[var(--color-brand-accent)]
+        "
+      >
         Enter Your Income
       </h2>
 
@@ -38,15 +48,27 @@ const IncomeForm: Component<IncomeFormProps> = (props) => {
           onInput={(e) =>
             setIncome(parseFloat((e.target as HTMLInputElement).value) || 0)
           }
-          class="w-40 border-b-2 border-brand-primary bg-transparent text-gray-800 focus:outline-none"
           min="0"
+          class="
+            w-40 border-b-2
+            border-[var(--color-brand-primary)] dark:border-[var(--color-border)]
+            bg-transparent
+            text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]
+            focus:outline-none
+          "
         />
         <select
           value={currency()}
           onChange={(e) =>
             setCurrency((e.target as HTMLSelectElement).value as Currency)
           }
-          class="w-24 border-b-2 border-brand-primary bg-transparent text-gray-800 focus:outline-none"
+          class="
+            w-24 border-b-2
+            border-[var(--color-brand-primary)] dark:border-[var(--color-border)]
+            bg-transparent
+            text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]
+            focus:outline-none
+          "
         >
           <option value="USD">USD</option>
           <option value="MDL">MDL</option>
@@ -57,7 +79,15 @@ const IncomeForm: Component<IncomeFormProps> = (props) => {
 
       <button
         onClick={props.onNext}
-        class="px-8 py-3 bg-brand-primary text-white rounded-full hover:bg-brand-dark transition"
+        class="
+          px-8 py-3 rounded-full transition
+          bg-[var(--color-brand-primary)]
+          hover:bg-[var(--color-brand-dark)]
+          text-white
+          dark:bg-[var(--color-brand-accent)]
+          dark:text-[var(--color-text-primary)]
+          dark:hover:bg-[var(--color-brand-primary)]
+        "
       >
         Next
       </button>

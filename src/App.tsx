@@ -4,12 +4,15 @@ import IncomeForm from './components/IncomeForm';
 import SavePercentageForm from './components/SavePercentageForm';
 import GoalsPage from './components/GoalsPage';
 import Dashboard from './components/Dashboard';
+import NavBar from './components/NavBar';
+import { initTheme } from './theme';
 
 type Stage = 'landing' | 'income' | 'percentage' | 'goals' | 'dashboard';
 const STORAGE_KEY = 'sf-stage';
 
 const App: Component = () => {
 
+  initTheme();
   const stored = localStorage.getItem(STORAGE_KEY) as Stage | null;
   const [stage, setStage] = createSignal<Stage>(stored ?? 'landing');
 
@@ -21,6 +24,7 @@ const App: Component = () => {
 
   return (
     <>
+      <NavBar/>
       {stage() === 'landing' && <Landing onStart={() => goTo('income')} />}
       {stage() === 'income' && (
         <IncomeForm onNext={() => goTo('percentage')} />

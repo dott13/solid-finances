@@ -7,7 +7,7 @@ interface PercentageData { percentage: number; }
 type StoredGoal = Goal & { starred: boolean };
 
 const Dashboard: Component = () => {
-  // Load income & saving rate
+  // load income & saving rate
   const incomeData: IncomeData = JSON.parse(
     localStorage.getItem('sf-income') || '{"income":0,"currency":"USD"}'
   );
@@ -15,7 +15,7 @@ const Dashboard: Component = () => {
     localStorage.getItem('sf-percentage') || '{"percentage":0}'
   );
 
-  // Load goals & starred flags
+  // load goals & starred flags
   const storedRaw = JSON.parse(localStorage.getItem('sf-goals') || '[]') as any[];
   const initialGoals: StoredGoal[] = storedRaw.map(g => ({
     name: g.name,
@@ -25,12 +25,12 @@ const Dashboard: Component = () => {
   }));
   const [goals, setGoals] = createSignal<StoredGoal[]>(initialGoals);
 
-  // Persist goals
+  // persist goals
   createEffect(() => {
     localStorage.setItem('sf-goals', JSON.stringify(goals()));
   });
 
-  // Modal & edit state
+  // modal & edit state
   const [showModal, setShowModal] = createSignal(false);
   const [editIdx, setEditIdx] = createSignal<number | null>(null);
   const openAdd = () => { setEditIdx(null); setShowModal(true); };
@@ -46,7 +46,7 @@ const Dashboard: Component = () => {
     }
   };
 
-  // Star toggling: only one at a time
+  // star toggling: only one at a time
   const toggleStar = (idx: number) => {
     setGoals(goals().map((g, i) => ({
       ...g,
@@ -54,7 +54,7 @@ const Dashboard: Component = () => {
     })));
   };
 
-  // Build sorted list with indices preserved
+  // build sorted list with indices preserved
   const sortedList = createMemo(() => {
     const arr = goals();
     const starredIdx = arr.findIndex(g => g.starred);
@@ -66,7 +66,7 @@ const Dashboard: Component = () => {
     ];
   });
 
-  // Calculate monthly save & months to goal
+  // calculate monthly save & months to goal
   const monthlySave = incomeData.income * (percData.percentage / 100);
   const monthsNeeded = createMemo(() => {
     const primary = sortedList()[0]?.goal;
@@ -74,32 +74,35 @@ const Dashboard: Component = () => {
       ? Math.ceil(primary.price / monthlySave)
       : Infinity;
   });
-  const primaryGoal = createMemo(() => sortedList()[0]?.goal);
-
-  // Get the starred goal specifically for the chart
   const starredGoal = createMemo(() => goals().find(g => g.starred));
 
   return (
-    <div class="min-h-screen p-4 bg-[var(--color-brand-bg)]">
+    <div class="min-h-screen p-4 bg-[var(--color-brand-bg)] dark:bg-[var(--color-card-bg)]">
       <div class="max-w-4xl mx-auto space-y-8">
 
-        {/* Top row: Income, Saving Rate & Chart */}
+        {/* top row: income, saving rate, chart */}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Income */}
-          <div class="p-6 bg-white rounded-2xl shadow border-2 border-[var(--color-brand-primary)] flex flex-col">
-            <span class="font-semibold text-[var(--color-brand-primary)]">Income</span>
-            <span class="mt-2 text-3xl font-bold text-[var(--color-brand-primary)]">
+          {/* income widget */}
+          <div class="p-6 rounded-2xl shadow border-2 border-[var(--color-border)]
+                      bg-[var(--color-card-bg)] dark:bg-[var(--color-card-bg)] flex flex-col">
+            <span class="font-semibold text-[var(--color-brand-primary)] dark:text-[var(--color-brand-accent)]">
+              Income
+            </span>
+            <span class="mt-2 text-3xl font-bold text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]">
               {incomeData.income} {incomeData.currency}
             </span>
           </div>
-          {/* Saving Rate */}
-          <div class="p-6 bg-white rounded-2xl shadow border-2 border-[var(--color-brand-primary)] flex flex-col">
-            <span class="font-semibold text-[var(--color-brand-primary)]">Saving Rate</span>
-            <span class="mt-2 text-3xl font-bold text-[var(--color-brand-primary)]">
+          {/* saving rate widget */}
+          <div class="p-6 rounded-2xl shadow border-2 border-[var(--color-border)]
+                      bg-[var(--color-card-bg)] dark:bg-[var(--color-card-bg)] flex flex-col">
+            <span class="font-semibold text-[var(--color-brand-primary)] dark:text-[var(--color-brand-accent)]">
+              Saving Rate
+            </span>
+            <span class="mt-2 text-3xl font-bold text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]">
               {percData.percentage}% ({monthlySave.toFixed(2)} {incomeData.currency}/mo)
             </span>
           </div>
-          {/* Chart spans both columns - shows starred goal */}
+          {/* chart spans both columns */}
           {starredGoal() && monthlySave > 0 && (
             <div class="md:col-span-2">
               <SavingsChart
@@ -110,56 +113,57 @@ const Dashboard: Component = () => {
               />
             </div>
           )}
-          {/* Show message when no goal is starred */}
+          {/* prompt to star a goal */}
           {!starredGoal() && goals().length > 0 && (
-            <div class="md:col-span-2 p-6 bg-white rounded-lg shadow border-2 border-[var(--color-brand-primary)] text-center">
-              <p class="text-[var(--color-brand-dark)]">
+            <div class="md:col-span-2 p-6 rounded-lg shadow border-2 border-[var(--color-border)]
+                        bg-[var(--color-card-bg)] dark:bg-[var(--color-card-bg)] text-center">
+              <p class="text-[var(--color-text-secondary)] dark:text-[var(--color-text-primary)]">
                 ⭐ Star a goal to see your savings projection
               </p>
             </div>
           )}
         </div>
 
-        {/* Bottom row: Goals & Months Until */}
+        {/* bottom row: goals list & months until */}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Goals list + Add button */}
+          {/* goals list + add button */}
           <div class="flex flex-col space-y-4">
-            <For each={sortedList()} fallback={<div>No goals yet</div>}>
+            <For each={sortedList()} fallback={<div class="text-[var(--color-text-secondary)] dark:text-[var(--color-text-primary)]">No goals yet</div>}>
               {({ goal, idx }) => (
                 <div
-                  class="relative p-4 bg-white rounded-xl shadow border-2 transition-all duration-300"
-                  classList={{ 
-                    'border-[var(--color-brand-accent)] bg-gradient-to-r from-white to-[var(--color-brand-bg)] scale-105 shadow-lg': goal.starred,
-                    'border-[var(--color-brand-primary)]': !goal.starred
+                  class="relative p-4 rounded-xl shadow transition-all duration-300
+                          bg-[var(--color-card-bg)] dark:bg-[var(--color-card-bg)]"
+                  classList={{
+                    'border-2 border-[var(--color-brand-accent)] scale-105': goal.starred,
+                    'border-2 border-[var(--color-border)]': !goal.starred
                   }}
                 >
                   <button
+                    onClick={() => toggleStar(idx)}
                     class="absolute top-2 right-10 text-xl transition-colors duration-200"
                     classList={{
                       'text-[var(--color-brand-accent)] animate-pulse': goal.starred,
-                      'text-[var(--color-brand-primary)] hover:text-[var(--color-brand-accent)]': !goal.starred
+                      'text-[var(--color-border)] hover:text-[var(--color-brand-accent)]': !goal.starred
                     }}
-                    onClick={() => toggleStar(idx)}
                   >
                     {goal.starred ? '★' : '☆'}
                   </button>
                   <button
-                    class="absolute top-2 right-2 text-[var(--color-brand-primary)] hover:text-[var(--color-brand-dark)]"
                     onClick={() => openEdit(idx)}
+                    class="absolute top-2 right-2 text-[var(--color-border)] hover:text-[var(--color-text-primary)] dark:hover:text-[var(--color-text-secondary)]"
                   >
                     ✎
                   </button>
                   <img
                     src={goal.image}
                     alt={goal.name}
-                    class="h-12 w-12 rounded-md object-cover mr-4"
+                    class="h-12 w-12 rounded-md object-cover mr-4 border-2 border-[var(--color-border)]"
                   />
                   <div>
-                    <span class="block font-semibold text-[var(--color-brand-primary)]">
+                    <span class="block font-semibold text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]">
                       {goal.name}
-                      {goal.starred && <span class="ml-2 text-[var(--color-brand-accent)]">⭐ Active Goal</span>}
                     </span>
-                    <span class="block text-sm text-[var(--color-brand-dark)]">
+                    <span class="block text-sm text-[var(--color-text-secondary)] dark:text-[var(--color-text-primary)]">
                       {goal.price} {incomeData.currency}
                     </span>
                   </div>
@@ -167,18 +171,25 @@ const Dashboard: Component = () => {
               )}
             </For>
             <button
-              class="w-full px-4 py-3 bg-[var(--color-brand-primary)] text-white rounded-lg hover:bg-[var(--color-brand-dark)] transition"
               onClick={openAdd}
+              class="w-full px-4 py-3 rounded-lg transition
+                     bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-dark)]
+                     dark:bg-[var(--color-brand-accent)] dark:hover:bg-[var(--color-brand-primary)]
+                     text-white"
             >
               + Add New Goal
             </button>
           </div>
 
-          {/* Months Until Next Goal */}
+          {/* months until widget */}
           <div class="self-start justify-self-end">
-            <div class="w-24 h-24 bg-white rounded-lg shadow border-2 border-[var(--color-brand-primary)] flex flex-col items-center justify-center">
-              <span class="text-xs font-medium text-[var(--color-brand-dark)]">Months Until</span>
-              <span class="mt-1 text-xl font-bold text-[var(--color-brand-primary)]">
+            <div class="w-24 h-24 rounded-lg shadow border-2 border-[var(--color-border)]
+                        bg-[var(--color-card-bg)] dark:bg-[var(--color-card-bg)]
+                        flex flex-col items-center justify-center">
+              <span class="text-xs font-medium text-[var(--color-text-secondary)] dark:text-[var(--color-text-primary)]">
+                Months Until
+              </span>
+              <span class="mt-1 text-xl font-bold text-[var(--color-text-primary)] dark:text-[var(--color-text-secondary)]">
                 {monthsNeeded() === Infinity ? 'N/A' : monthsNeeded()}
               </span>
             </div>
@@ -186,7 +197,7 @@ const Dashboard: Component = () => {
         </div>
       </div>
 
-      {/* Goal creation/edit modal */}
+      {/* goal creation/edit modal */}
       <GoalModal
         show={showModal()}
         initial={editIdx() !== null ? goals()[editIdx()!] : undefined}
